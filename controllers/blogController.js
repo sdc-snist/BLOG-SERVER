@@ -1,27 +1,53 @@
-const Blog = require("../models/Blog.js");
+const Blog = require("../models/blog");
 
-const insertBlog = async (req, res) => {
+async function insertBlog(req, res) {
   try {
     const newBlog = new Blog(req.body);
     const savedBlog = await newBlog.save();
     res.status(201).json(savedBlog);
   } catch (err) {
-    res.status(400).json({ message: "Invalid data", error: err.message });
+    res.status(400).json({ error: "Invalid data" });
   }
-};
+}
 
-const getAllBlogs = async (req, res) => {
+async function getAllBlogs(req, res) {
   try {
     const blogs = await Blog.find();
-    res.status(200).json(blogs);
+    res.json(blogs);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Some error occurred", error: err.message });
+    res.status(500).json({ error: "Server error" });
   }
-};
+}
+
+async function updateBlogByID(req, res) {
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatedBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.json(updatedBlog);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update blog" });
+  }
+}
+
+async function deleteBlogByID(req, res) {
+  try {
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    if (!deletedBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+    res.json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete blog" });
+  }
+}
 
 module.exports = {
   insertBlog,
   getAllBlogs,
+  updateBlogByID,
+  deleteBlogByID,
 };

@@ -1,5 +1,6 @@
 # Node modules
-/node_modules/
+node_modules/
 
-# Environment variable files
-/config.env
+# Environment variables
+.env
+
