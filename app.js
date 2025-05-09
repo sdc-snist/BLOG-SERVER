@@ -3,7 +3,7 @@ const connectDB = require("./config/db.js");
 const blogRoutes = require("./routes/blogRoutes.js");
 const dotenv = require("dotenv");
 const app = express();
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: ".env" });
 app.use(express.json());
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError) {
